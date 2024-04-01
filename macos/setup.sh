@@ -1,10 +1,21 @@
 #!/bin/sh
 
+set -e
+
+cd "$(dirname "$0")/.."
+DOTFILES_ROOT=$(pwd -P)
+
+source bin/link-file
+source bin/pretty-log
+
 # Set macOS defaults
-./set-defaults.sh
+macos/set-defaults.sh
 
 # Set macOS hostname
-./set-hostname.sh
+macos/set-hostname.sh
 
 # use install base CLI tools
-./install-xcode.sh
+macos/install-xcode.sh
+
+# install Intel app compatability tooling
+macos/install-rosetta.sh
