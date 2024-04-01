@@ -1,0 +1,30 @@
+#
+# .zshenv - Zsh environment file, loaded always.
+#
+
+# disable separating shell history into .zsh_sessions
+SHELL_SESSIONS_DISABLE=1
+
+# XDG
+export XDG_CONFIG_HOME="${XDG_CONFIG_HOME:=$HOME/.config}"
+export XDG_CACHE_HOME="${XDG_CACHE_HOME:=$HOME/.cache}"
+export XDG_DATA_HOME="${XDG_DATA_HOME:=$HOME/.local/share}"
+export XDG_STATE_HOME="${XDG_STATE_HOME:=$HOME/.local/state}"
+export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:=$HOME/.xdg}"
+export XDG_PROJECTS_DIR="${XDG_PROJECTS_DIR:=$HOME/Projects}"
+
+# zsh config root dir magic
+export ZDOTDIR="${ZDOTDIR:=$XDG_CONFIG_HOME/zsh}"
+
+# Add variables for key Zsh directories.
+export __zsh_config_dir=${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}
+export __zsh_user_data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/zsh
+export __zsh_cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/zsh
+
+# Ensure that a non-login, non-interactive shell has a defined environment.
+if [[ ! -o LOGIN && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
+  source "${ZDOTDIR:-$HOME}/.zprofile"
+fi
+
+export VISUAL=nvim
+export EDITOR=nvim
