@@ -53,9 +53,9 @@ install_zsh_configs () {
 
   local overwrite_all=false backup_all=false skip_all=false
 
-  for src in $(find -H "zsh/configs" -maxdepth 1)
+  for src in $(find -H "$DOTFILES_ROOT/zsh/configs")
   do
-    dst="$ZDOTDIR/.$(basename "${src%.*}")"
+    dst="$ZDOTDIR/.$(basename "$src")"
     link_file "$src" "$dst"
   done
 }
