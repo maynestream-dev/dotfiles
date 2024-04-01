@@ -10,8 +10,6 @@ DOTFILES_ROOT=$(pwd -P)
 source bin/link-file
 source bin/pretty-log
 
-echo ''
-
 setup_gitconfig () {
   if ! [ -f git/gitconfig.local.symlink ]
   then
@@ -30,7 +28,7 @@ setup_gitconfig () {
 
     sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.local.symlink.example > git/gitconfig.local.symlink
 
-    success 'gitconfig'
+    success 'completed gitconfig setup'
   fi
 }
 
@@ -60,13 +58,7 @@ install_zsh_configs () {
   done
 }
 
-setup_gitconfig
-symlink_dotfiles
-install_zsh_configs
-
-# If we're on a Mac, let's install and setup homebrew.
-if [ "$(uname -s)" == "Darwin" ]
-then
+run_setup () {
   info "installing dependencies"
   if source bin/dot | while read -r data; do info "$data"; done
   then
@@ -74,7 +66,15 @@ then
   else
     fail "error installing dependencies"
   fi
-fi
+}
 
 echo ''
-echo '  All installed!'
+setup_gitconfig
+echo ''
+symlink_dotfiles
+echo ''
+install_zsh_configs
+echo ''
+run_setup
+echo ''
+success 'All installed!'
