@@ -1,0 +1,53 @@
+#!/bin/sh
+#
+# dot
+#
+# `dot` handles installation, updates, things like that. Run it periodically
+# to make sure you're on the latest and greatest.
+
+set -e
+
+bin_dir="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
+dotfiles_dir="$(cd "$( dirname "$bin_dir" )" && pwd -P)"
+
+usage() {
+  echo "dot -- dotfiles management"
+  echo ""
+  echo "Usage: dot [options]"
+  echo ""
+  echo "Options:"
+  echo "  -e, --edit    Open dotfiles directory for editing"
+  echo "  -h, --help    Show this help message and exit"
+  exit
+}
+
+while test $# -gt 0; do
+  case "$1" in
+    "-h"|"--help")
+      usage
+      ;;
+    "-e"|"--edit")
+      exec "$EDITOR" "$dotfiles_dir"
+      exit
+      ;;
+    *)
+      echo "Invalid option: $1"
+      usage
+      ;;
+  esac
+  shift
+done
+
+export DOTFILES=$HOME/.dotfiles
+
+# Setup macos
+echo "› Setup macos"
+$DOTFILES/macos/setup.sh
+
+# Install homebrew
+echo "› Setup homebrew"
+$DOTFILES/homebrew/setup.sh # 2>&1
+
+# Install software
+echo "› Setup sofware"
+$DOTFILES/script/install
