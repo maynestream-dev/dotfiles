@@ -29,6 +29,7 @@ fi
 # add ~/.local/bin to $PATH if it exists
 [[ -d ~/.local/bin ]] && path=(~/.local/bin $path)
 
+source /opt/homebrew/opt/git-extras/share/git-extras/git-extras-completion.zsh
 # add brew to $PATH (prezto brew module needs it on the path)
 [[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 [[ -d ~/.linuxbrew ]] && eval "$(~/.linuxbrew/bin/brew shellenv)"
