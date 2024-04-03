@@ -7,8 +7,10 @@
 
 set -e
 
-bin_dir="$(cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd -P)"
-dotfiles_dir="$(cd "$( dirname "$bin_dir" )" && pwd -P)"
+if [[ -z "$DOTFILES" ]]; then
+  echo '$DOTFILES var must be set'
+  exit 1
+fi
 
 usage() {
   echo "dot -- dotfiles management"
@@ -27,7 +29,7 @@ while test $# -gt 0; do
       usage
       ;;
     "-e"|"--edit")
-      exec "$EDITOR" "$dotfiles_dir"
+      exec "$EDITOR" "$DOTFILES"
       exit
       ;;
     *)
@@ -37,8 +39,6 @@ while test $# -gt 0; do
   esac
   shift
 done
-
-export DOTFILES=$HOME/.dotfiles
 
 # Setup macos
 echo "› Setup macos"

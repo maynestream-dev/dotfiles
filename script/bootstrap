@@ -1,11 +1,11 @@
-#!/bin/bash
+#!/bin/sh
 #
 # bootstrap installs things.
 
 set -e
 
 cd "$(dirname "$0")/.."
-DOTFILES_ROOT=$(pwd -P)
+DOTFILES=$(pwd -P)
 
 source bin/link-file
 source bin/pretty-log
@@ -37,7 +37,7 @@ symlink_dotfiles () {
 
   local overwrite_all=false backup_all=false skip_all=false
 
-  for src in $(find -H "$DOTFILES_ROOT" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
+  for src in $(find -H "$DOTFILES" -maxdepth 2 -name '*.symlink' -not -path '*.git*')
   do
     dst="$HOME/.$(basename "${src%.*}")"
     link_file "$src" "$dst"
@@ -47,11 +47,21 @@ symlink_dotfiles () {
 install_zsh_configs () {
   info 'installing zsh configs'
 
+  if [[ ! -z "$ZDOTDIR" ]]; then
+    fail '$ZDOTDIR is already set in environment - this will conflict with .zshenv!' 
+  fi
+
   source ~/.zshenv
+
+  if [[ -z "$ZDOTDIR" ]]; then
+    fail '$ZDOTDIR is not set in .zshenv!'
+  fi
+
+  mkdir -p "$ZDOTDIR"
 
   local overwrite_all=false backup_all=false skip_all=false
 
-  for src in $(find -H "$DOTFILES_ROOT/zsh/configs")
+  for src in $(find -H "$DOTFILES/zsh/configs" -mindepth 1)
   do
     dst="$ZDOTDIR/.$(basename "$src")"
     link_file "$src" "$dst"
