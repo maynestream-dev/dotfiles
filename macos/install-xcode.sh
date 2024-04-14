@@ -4,7 +4,6 @@
 
 # See http://apple.stackexchange.com/questions/107307/how-can-i-install-the-command-line-tools-completely-from-the-command-line
 
-echo "Checking Xcode CLI tools"
 # Only run if the tools are not installed yet
 # To check that try to print the SDK path
 xcode-select -p &> /dev/null
@@ -17,7 +16,7 @@ if [ $? -ne 0 ]; then
     sed -e 's/^ *//' |
     tr -d '\n')
   softwareupdate -i "$PROD" --verbose;
-else
-  echo "Xcode CLI tools OK"
 fi
+
+echo "Xcode CLI tools installed"
 

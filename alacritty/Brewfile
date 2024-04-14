@@ -1,0 +1,6 @@
+tap "homebrew/cask-fonts"
+
+cask "alacritty"
+
+cask "font-ubuntu-mono-nerd-font"
+cask "font-ubuntu-nerd-font"

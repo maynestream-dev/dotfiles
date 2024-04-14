@@ -1,20 +1,20 @@
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
-if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-fi
+#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+#fi
 
 # .zshrc is for interactive shells
 
 # profile startup
-zmodload zsh/zprof
+# zmodload zsh/zprof
 
 # see options for zsh on sharing history https://zsh.sourceforge.io/Doc/Release/Options.html#History
 # SHELL_SESSIONS_DISABLE=1 should also be set in .zshenv on macOs
 setopt SHARE_HISTORY
 
-alias tmux='tmux -f ~/.config/tmux/tmux.conf'
+# alias tmux='tmux -f ~/.config/tmux/tmux.conf'
 
 if [[ "$(hostname)" == "archlaptop" ]]; then
     # laptop specific commands here
@@ -29,10 +29,10 @@ fi
 # add ~/.local/bin to $PATH if it exists
 [[ -d ~/.local/bin ]] && path=(~/.local/bin $path)
 
-source /opt/homebrew/opt/git-extras/share/git-extras/git-extras-completion.zsh
+#source /opt/homebrew/opt/git-extras/share/git-extras/git-extras-completion.zsh
 # add brew to $PATH (prezto brew module needs it on the path)
-[[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
-[[ -d ~/.linuxbrew ]] && eval "$(~/.linuxbrew/bin/brew shellenv)"
+#[[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+#[[ -d ~/.linuxbrew ]] && eval "$(~/.linuxbrew/bin/brew shellenv)"
 if command -v brew > /dev/null; then
   export DYLD_FALLBACK_LIBRARY_PATH="$(brew --prefix)/lib"
   [[ -d "$(brew --prefix)/opt/llvm" ]] && path=("$(brew --prefix)/opt/llvm/bin" $path)
@@ -57,6 +57,7 @@ if ! zgenom saved; then
   # Load some oh-my-zsh plugins
   zgenom ohmyzsh plugins/ssh-agent
   zgenom ohmyzsh plugins/colored-man-pages
+  zgenom ohmyzsh plugins/brew
   if [[ $(uname -a | grep -ci Darwin) = 1 ]]; then
     # Load macOS-specific plugins
     zgenom ohmyzsh plugins/macos
@@ -67,7 +68,7 @@ if ! zgenom saved; then
   zgenom prezto git
 
   # everything else
-  # zgenom load romkatv/powerlevel10k powerlevel10k
+  #zgenom load romkatv/powerlevel10k powerlevel10k
   zgenom load zsh-users/zsh-completions src
   zgenom load zsh-users/zsh-syntax-highlighting
   zgenom load zsh-users/zsh-history-substring-search
@@ -75,6 +76,7 @@ if ! zgenom saved; then
   zgenom save
   # zgenom compile ~/.zshrc
   zgenom compile $ZDOTDIR/.zshrc
+  zgenom compile $ZDOTDIR
 fi
 
 zstyle :omz:plugins:ssh-agent agent-forwarding yes
@@ -83,22 +85,22 @@ zstyle :omz:plugins:ssh-agent lazy yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-load-keychain
 
 # Editor preferences: Helix > Neovim > Vim
-if command -v hx > /dev/null; then
-  export EDITOR=hx
-elif command -v nvim > /dev/null; then
-  export EDITOR=nvim
-else
-  export EDITOR=vim
-fi
-export GIT_EDITOR=$EDITOR
-export VISUAL=$EDITOR
+#if command -v hx > /dev/null; then
+#  export EDITOR=hx
+#elif command -v nvim > /dev/null; then
+#  export EDITOR=nvim
+#else
+#  export EDITOR=vim
+#fi
+# export GIT_EDITOR=$EDITOR
+#export VISUAL=$EDITOR
 
 # less
-export PAGER='less'
-export LESS='-F -g -i -M -R -S -w -X -z-4'
-if (( ${+commands[lesspipe.sh]} )); then
-  export LESSOPEN='| /usr/bin/env lesspipe.sh %s 2>&-'
-fi
+#export PAGER='less'
+#export LESS='-F -g -i -M -R -S -w -X -z-4'
+#if (( ${+commands[lesspipe.sh]} )); then
+#  export LESSOPEN='| /usr/bin/env lesspipe.sh %s 2>&-'
+#fi
 
 # global ripgrep config
 # if command -v rg > /dev/null; then export RIPGREP_CONFIG_PATH=~/.ripgreprc; fi
@@ -112,10 +114,10 @@ fi
 # create an alias to the first arg, if the command in the second arg exists
 # shellcheck disable=2139
 function alias_if_exists() { command -v "${2%% *}" > /dev/null && alias "$1"="$2"; }
-alias_if_exists cat bat
-alias_if_exists vi nvim
-alias_if_exists vim nvim
-alias_if_exists mas 'reattach-to-user-namespace mas'
+# alias_if_exists cat bat
+# alias_if_exists vi nvim
+# alias_if_exists vim nvim
+# alias_if_exists mas 'reattach-to-user-namespace mas'
 
 # source a script, if it exists
 function source_if_exists() { [[ -s $1 ]] && source "$1"; }
@@ -166,28 +168,8 @@ if type rbenv &> /dev/null || [[ -a $RBENV_ROOT/bin/rbenv ]]; then
   }
 fi
 
-# add airport to path
-AIRPORT_PATH=/System/Library/PrivateFrameworks/Apple80211.framework/Resources
-[[ -d "$AIRPORT_PATH" ]] && path=("$AIRPORT_PATH" $path)
-
-# global node installs (gross)
-[[ -d "$XDG_DATA_HOME/node/bin" ]] && path=("$XDG_DATA_HOME/node/bin" $path)
-
-# pnpm global installs (slightly less gross)
-if command -v pnpm > /dev/null; then
-  export PNPM_HOME="$XDG_DATA_HOME/pnpm"
-  path=("$PNPM_HOME" $path)
-fi
-
-# bun
-if [[ -d ~/.bun ]]; then
-  source_if_exists ~/.bun/_bun
-  export BUN_INSTALL="$HOME/.bun"
-  export PATH="$BUN_INSTALL/bin:$PATH"
-fi
-
 # theme for faq syntax highlighting
-export FAQ_STYLE='github'
+#export FAQ_STYLE='github'
 
 #source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 
@@ -203,5 +185,7 @@ bindkey "$terminfo[kcud1]" history-substring-search-down
 #bindkey '^[[B' history-substring-search-down
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-# [[ ! -f ~/.config/zsh/.p10k.zsh ]] || source ~/.config/zsh/.p10k.zsh
-# (( ! ${+functions[p10k]} )) || p10k finalize
+#[[ ! -f "$ZDOTDIR/.p10k.zsh" ]] || source "$ZDOTDIR/.p10k.zsh"
+#(( ! ${+functions[p10k]} )) || p10k finalize
+
+# zprof

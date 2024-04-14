@@ -2,11 +2,14 @@
 
 set -e
 
-cd "$(dirname "$0")/.."
-DOTFILES_ROOT=$(pwd -P)
+if [[ -z "$DOTFILES" ]]; then
+  echo '$DOTFILES var must be set'
+  exit 1
+fi
 
-source bin/link-file
-source bin/pretty-log
+cd "$DOTFILES"
+
+source pretty-log
 
 # Set macOS defaults
 macos/set-defaults.sh

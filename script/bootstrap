@@ -10,11 +10,11 @@ DOTFILES=$(pwd -P)
 source bin/link-file
 source bin/pretty-log
 
-setup_gitconfig () {
+install_gitconfig () {
+  title 'Install gitconfig'
+
   if ! [ -f git/gitconfig.local.symlink ]
   then
-    info 'setup gitconfig'
-
     git_credential='cache'
     if [ "$(uname -s)" == "Darwin" ]
     then
@@ -28,12 +28,12 @@ setup_gitconfig () {
 
     sed -e "s/AUTHORNAME/$git_authorname/g" -e "s/AUTHOREMAIL/$git_authoremail/g" -e "s/GIT_CREDENTIAL_HELPER/$git_credential/g" git/gitconfig.local.symlink.example > git/gitconfig.local.symlink
 
-    success 'completed gitconfig setup'
+    success 'Completed gitconfig install'
   fi
 }
 
 symlink_dotfiles () {
-  info 'installing dotfiles'
+  title 'Installing dotfiles'
 
   local overwrite_all=false backup_all=false skip_all=false
 
@@ -45,16 +45,18 @@ symlink_dotfiles () {
 }
 
 install_zsh_configs () {
-  info 'installing zsh configs'
+  title 'Installing zsh configs'
 
   if [[ ! -z "$ZDOTDIR" ]]; then
-    fail '$ZDOTDIR is already set in environment - this will conflict with .zshenv!' 
+    local ZDOTDIR_PREV="$ZDOTDIR"
   fi
 
   source ~/.zshenv
 
   if [[ -z "$ZDOTDIR" ]]; then
     fail '$ZDOTDIR is not set in .zshenv!'
+  elif [[ "$ZDOTDIR" != "$ZDOTDIR_PREV" ]]; then
+    fail "Previously set ZDOTDIR (${ZDOTDIR}) was overriden by ZDOTDIR from ~/.zshenv!"
   fi
 
   mkdir -p "$ZDOTDIR"
@@ -69,17 +71,17 @@ install_zsh_configs () {
 }
 
 run_setup () {
-  info "installing dependencies"
+  title "Installing dependencies"
   if source bin/dot | while read -r data; do info "$data"; done
   then
-    success "dependencies installed"
+    success "Dependencies installed"
   else
-    fail "error installing dependencies"
+    fail "Error installing dependencies"
   fi
 }
 
-echo ''
-setup_gitconfig
+#echo ''
+install_gitconfig
 echo ''
 symlink_dotfiles
 echo ''

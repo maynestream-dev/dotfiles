@@ -7,22 +7,26 @@
 
 set -e
 
-cd "$(dirname "$0")/.."
-DOTFILES_ROOT=$(pwd -P)
+if [[ -z "$DOTFILES" ]]; then
+  echo '$DOTFILES var must be set'
+  exit 1
+fi
 
-source bin/link-file
-source bin/pretty-log
+cd "$DOTFILES"
+
+source pretty-log
 
 # Check for Homebrew
 if test ! $(which brew)
 then
-  echo "› Install homebrew"
+  info "Install homebrew"
 
   ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
 fi
 
-echo "› Update homebrew"
+info "Update homebrew"
 brew update
 
-exit 0
+info "Installing brew bundle dependencies"
+brew bundle
