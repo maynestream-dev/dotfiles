@@ -14,15 +14,14 @@ fi
 
 cd "$DOTFILES"
 
-source pretty-log
+source bin/pretty-log
 
 # Check for Homebrew
-if test ! $(which brew)
+if [[ ! $(which brew) ]]
 then
   info "Install homebrew"
 
-  ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 fi
 
 info "Update homebrew"

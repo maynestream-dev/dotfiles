@@ -55,8 +55,8 @@ install_zsh_configs () {
 
   if [[ -z "$ZDOTDIR" ]]; then
     fail '$ZDOTDIR is not set in .zshenv!'
-  elif [[ "$ZDOTDIR" != "$ZDOTDIR_PREV" ]]; then
-    fail "Previously set ZDOTDIR (${ZDOTDIR}) was overriden by ZDOTDIR from ~/.zshenv!"
+  elif [[ ! -z "$ZDOTDIR_PREV" && "$ZDOTDIR" != "$ZDOTDIR_PREV" ]]; then
+    fail "Previously set ZDOTDIR (${ZDOTDIR_PREV}) was overriden by ZDOTDIR from ~/.zshenv!"
   fi
 
   mkdir -p "$ZDOTDIR"

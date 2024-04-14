@@ -11,7 +11,7 @@ fi
 
 cd "$DOTFILES"
 
-source pretty-log
+source bin/pretty-log
 
 # find the installers and run them iteratively
 info "Running installers..."

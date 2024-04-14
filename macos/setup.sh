@@ -9,7 +9,7 @@ fi
 
 cd "$DOTFILES"
 
-source pretty-log
+source bin/pretty-log
 
 # Set macOS defaults
 macos/set-defaults.sh
