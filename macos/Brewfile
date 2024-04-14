@@ -1,0 +1,29 @@
+cask "1password"
+cask "1password-cli"
+cask "obsidian"
+cask "spotify"
+cask "steam"
+cask "vlc"
+
+if OS.mac?
+  cask "amethyst"
+  cask "sanesidebuttons"
+
+  brew "mas"
+  # https://github.com/mas-cli/mas?tab=readme-ov-file#-using-tmux
+  brew "reattach-to-user-namespace"
+
+  mas "1Password for Safari", id: 1569813296
+  mas "AdBlock", id: 1402042596
+  mas "DuckDuckGo Privacy for Safari", id: 1482920575
+  mas "MarkDownload - Markdown Web Clipper", id: 1554029832
+  mas "Microsoft Excel", id: 462058435
+  mas "Microsoft OneNote", id: 784801555
+  mas "Microsoft Outlook", id: 985367838
+  mas "Microsoft PowerPoint", id: 462062816
+  mas "Microsoft Word", id: 462054704
+  mas "OneDrive", id: 823766827
+  mas "Prime Video", id: 545519333
+  mas "TripMode", id: 1513400665
+  mas "‎WhatsApp", id: 310633997
+end

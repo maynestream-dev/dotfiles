@@ -1,14 +1,18 @@
-#!/usr/bin/env bash
+#!/bin/sh
 #
 # Run all dotfiles installers.
 
 set -e
 
-cd "$(dirname $0)"/..
+if [[ -z "$DOTFILES" ]]; then
+  echo '$DOTFILES var must be set'
+  exit 1
+fi
 
-echo "› Installing brew bundle dependencies"
-brew bundle
+cd "$DOTFILES"
+
+source pretty-log
 
 # find the installers and run them iteratively
-echo "› Running installers..."
-find . -name install.sh | while read installer ; do sh -c "${installer}" ; done
+info "Running installers..."
+find . -name install.sh | while read installer ; do info "$installer"; sh -c "${installer}" ; done

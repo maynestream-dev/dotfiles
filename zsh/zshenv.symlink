@@ -16,8 +16,10 @@ export XDG_PROJECTS_DIR="${XDG_PROJECTS_DIR:=$HOME/Projects}"
 # zsh config root dir magic
 export ZDOTDIR="${ZDOTDIR:=$XDG_CONFIG_HOME/zsh}"
 
+export DOCKER_CONFIG="$XDG_CONFIG_HOME/docker"
+
 # Add variables for key Zsh directories.
-#export __zsh_config_dir=${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.confiig}/zsh}
+#export __zsh_config_dir=${ZDOTDIR:-${XDG_CONFIG_HOME:-$HOME/.config}/zsh}
 #export __zsh_user_data_dir=${XDG_DATA_HOME:-$HOME/.local/share}/zsh
 #export __zsh_cache_dir=${XDG_CACHE_HOME:-$HOME/.cache}/zsh
 
@@ -28,6 +30,9 @@ export ZDOTDIR="${ZDOTDIR:=$XDG_CONFIG_HOME/zsh}"
 
 export VISUAL=nvim
 export EDITOR=nvim
+export GIT_EDITOR=nvim
+export PAGER=less
+export LESS='-F -g -i -M -R -S -w -X -z-4'
 
 # shortcut to this dotfiles path is $DOTFILES
 export DOTFILES=$HOME/.dotfiles

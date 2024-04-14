@@ -12,6 +12,8 @@ if [[ -z "$DOTFILES" ]]; then
   exit 1
 fi
 
+source pretty-log
+
 usage() {
   echo "dot -- dotfiles management"
   echo ""
@@ -41,13 +43,13 @@ while test $# -gt 0; do
 done
 
 # Setup macos
-echo "› Setup macos"
-$DOTFILES/macos/setup.sh
+header "Setup macos"
+$DOTFILES/macos/setup.sh | while read -r data; do info "$data"; done
 
 # Install homebrew
-echo "› Setup homebrew"
-$DOTFILES/homebrew/setup.sh # 2>&1
+header "Setup homebrew"
+$DOTFILES/homebrew/setup.sh | while read -r data; do info "$data"; done
 
 # Install software
-echo "› Setup sofware"
-$DOTFILES/script/install
+header "Setup sofware"
+$DOTFILES/script/install | while read -r data; do info "$data"; done

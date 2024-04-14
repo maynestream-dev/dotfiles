@@ -1,16 +1,3 @@
 # .zprofile is for login shells
 
-eval "$(/opt/homebrew/bin/brew shellenv)"
 
-alias nas="ssh maynetainer@maynetainer.local -p 8022"
-
-# Added by OrbStack: command-line tools and integration
-source ~/.orbstack/shell/init.zsh 2>/dev/null || :
-
-if type brew &>/dev/null
-then
-  FPATH="$(brew --prefix)/share/zsh/site-functions:${FPATH}"
-
-  autoload -Uz compinit
-  compinit
-fi
