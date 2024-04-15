@@ -1,0 +1,191 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+#fi
+
+# .zshrc is for interactive shells
+
+# profile startup
+# zmodload zsh/zprof
+
+# see options for zsh on sharing history https://zsh.sourceforge.io/Doc/Release/Options.html#History
+# SHELL_SESSIONS_DISABLE=1 should also be set in .zshenv on macOs
+setopt SHARE_HISTORY
+
+# alias tmux='tmux -f ~/.config/tmux/tmux.conf'
+
+if [[ "$(hostname)" == "archlaptop" ]]; then
+    # laptop specific commands here
+else
+    # desktop or server machine commands
+fi
+
+if [[ "$OSTYPE" == darwin* ]]; then
+  # export BROWSER='open'
+fi
+
+# add ~/.local/bin to $PATH if it exists
+[[ -d ~/.local/bin ]] && path=(~/.local/bin $path)
+
+#source /opt/homebrew/opt/git-extras/share/git-extras/git-extras-completion.zsh
+# add brew to $PATH (prezto brew module needs it on the path)
+#[[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
+#[[ -d ~/.linuxbrew ]] && eval "$(~/.linuxbrew/bin/brew shellenv)"
+if command -v brew > /dev/null; then
+  export DYLD_FALLBACK_LIBRARY_PATH="$(brew --prefix)/lib"
+  [[ -d "$(brew --prefix)/opt/llvm" ]] && path=("$(brew --prefix)/opt/llvm/bin" $path)
+fi;
+
+# zgenom - an optimized zsh package manager
+export ZGEN_DIR=$XDG_DATA_HOME/zgenom
+[[ ! -d $ZGEN_DIR ]] && git clone https://github.com/jandamm/zgenom.git "$ZGEN_DIR"
+# shellcheck disable=SC1091
+source "$ZGEN_DIR/zgenom.zsh"
+zgenom autoupdate
+if ! zgenom saved; then
+  zgenom compdef
+
+  # prezto
+  zgenom prezto editor dot-expansion yes
+  [[ $OSTYPE == darwin* ]] && zgenom prezto prompt theme sorin
+  #[[ ! $OSTYPE == darwin* ]] && zgenom prezto prompt theme 'skwp'
+
+  zmodload zsh/terminfo
+
+  # Load some oh-my-zsh plugins
+  zgenom ohmyzsh plugins/ssh-agent
+  zgenom ohmyzsh plugins/colored-man-pages
+  zgenom ohmyzsh plugins/brew
+  if [[ $(uname -a | grep -ci Darwin) = 1 ]]; then
+    # Load macOS-specific plugins
+    zgenom ohmyzsh plugins/macos
+  fi
+
+  # load after omz
+  zgenom prezto
+  zgenom prezto git
+
+  # everything else
+  #zgenom load romkatv/powerlevel10k powerlevel10k
+  zgenom load zsh-users/zsh-completions src
+  zgenom load zsh-users/zsh-syntax-highlighting
+  zgenom load zsh-users/zsh-history-substring-search
+
+  zgenom save
+  # zgenom compile ~/.zshrc
+  zgenom compile $ZDOTDIR/.zshrc
+  zgenom compile $ZDOTDIR
+fi
+
+zstyle :omz:plugins:ssh-agent agent-forwarding yes
+zstyle :omz:plugins:ssh-agent helper ksshaskpass
+zstyle :omz:plugins:ssh-agent lazy yes
+zstyle :omz:plugins:ssh-agent ssh-add-args --apple-load-keychain
+
+# Editor preferences: Helix > Neovim > Vim
+#if command -v hx > /dev/null; then
+#  export EDITOR=hx
+#elif command -v nvim > /dev/null; then
+#  export EDITOR=nvim
+#else
+#  export EDITOR=vim
+#fi
+# export GIT_EDITOR=$EDITOR
+#export VISUAL=$EDITOR
+
+# less
+#export PAGER='less'
+#export LESS='-F -g -i -M -R -S -w -X -z-4'
+#if (( ${+commands[lesspipe.sh]} )); then
+#  export LESSOPEN='| /usr/bin/env lesspipe.sh %s 2>&-'
+#fi
+
+# global ripgrep config
+# if command -v rg > /dev/null; then export RIPGREP_CONFIG_PATH=~/.ripgreprc; fi
+
+# add sandboxed tailscale to path
+# [[ -s /Applications/Tailscale.app/Contents/MacOS ]] && path=("/Applications/Tailscale.app/Contents/MacOS" $path)
+
+# 1password 8 ssh-agent
+# [[ $OSTYPE == darwin* ]] && export SSH_AUTH_SOCK="$HOME/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+
+# create an alias to the first arg, if the command in the second arg exists
+# shellcheck disable=2139
+function alias_if_exists() { command -v "${2%% *}" > /dev/null && alias "$1"="$2"; }
+# alias_if_exists cat bat
+# alias_if_exists vi nvim
+# alias_if_exists vim nvim
+# alias_if_exists mas 'reattach-to-user-namespace mas'
+
+# source a script, if it exists
+function source_if_exists() { [[ -s $1 ]] && source "$1"; }
+# source_if_exists "$HOME/.gvm/scripts/gvm"
+# source_if_exists "$HOME/.iterm2_shell_integration.zsh"
+# source_if_exists "$HOME/.nix-profile/etc/profile.d/nix.sh"
+
+# Put Go pkgs in $XDG_DATA_HOME, add GOBIN to the path, add brew libs to CGO
+if command -v go > /dev/null; then
+  export GOPATH=$XDG_DATA_HOME/go
+  [[ -d $GOPATH/bin ]] && path=("$GOPATH/bin" $path)
+  if command -v brew > /dev/null; then export CGO_LDFLAGS="-L$(brew --prefix)/lib"; fi
+fi
+
+# Add cargo to $PATH and turn on backtraces for Rust
+#export RUSTUP_HOME=$XDG_DATA_HOME/rustup
+#export CARGO_HOME=$XDG_DATA_HOME/cargo
+#[[ -d $CARGO_HOME/bin ]] && path=("$CARGO_HOME/bin" $path)
+#if command -v rustc > /dev/null; then export RUST_BACKTRACE=1; fi
+
+# never generate .pyc files: it's slower, but maintains your sanity
+if command -v python > /dev/null; then export PYTHONDONTWRITEBYTECODE=1; fi
+
+# lazy load pyenv
+export PYENV_ROOT=${PYENV_ROOT:-$XDG_DATA_HOME/pyenv}
+[[ -a "$PYENV_ROOT/bin/pyenv" ]] && path=("$PYENV_ROOT/bin" $path)
+if type pyenv &> /dev/null || [[ -a $PYENV_ROOT/bin/pyenv ]]; then
+  function pyenv() {
+    unset pyenv
+    path=("$PYENV_ROOT/shims" $path)
+    eval "$(command pyenv init -)"
+    if command -v pyenv-virtualenv-init > /dev/null; then
+      eval "$(pyenv virtualenv-init -)"
+      export PYENV_VIRTUALENV_DISABLE_PROMPT=1
+    fi
+    pyenv "$@"
+  }
+fi
+
+# lazy load rbenv
+export RBENV_ROOT=${RBENV_ROOT:-$XDG_DATA_HOME/rbenv}
+[[ -a $RBENV_ROOT/bin/rbenv ]] && path=("$RBENV_ROOT/bin" $path)
+if type rbenv &> /dev/null || [[ -a $RBENV_ROOT/bin/rbenv ]]; then
+  function rbenv() {
+    unset rbenv
+    path=("$RBENV_ROOT/shims" $path)
+    eval "$(command rbenv init -)"
+  }
+fi
+
+# theme for faq syntax highlighting
+#export FAQ_STYLE='github'
+
+#source $(brew --prefix)/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+# zsh keybinds
+bindkey '^[[H' beginning-of-line # Home
+bindkey '^[[F' end-of-line       # End
+# mac-style text navigation for minimal terminal emulators
+bindkey "\e[1;3D" backward-word # ⌥←
+bindkey "\e[1;3C" forward-word  # ⌥→
+bindkey "$terminfo[kcuu1]" history-substring-search-up
+bindkey "$terminfo[kcud1]" history-substring-search-down
+#bindkey '^[[A' history-substring-search-up
+#bindkey '^[[B' history-substring-search-down
+
+# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
+#[[ ! -f "$ZDOTDIR/.p10k.zsh" ]] || source "$ZDOTDIR/.p10k.zsh"
+#(( ! ${+functions[p10k]} )) || p10k finalize
+
+# zprof

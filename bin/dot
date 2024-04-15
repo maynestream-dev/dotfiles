@@ -1,0 +1,61 @@
+#!/bin/sh
+#
+# dot
+#
+# `dot` handles installation, updates, things like that. Run it periodically
+# to make sure you're on the latest and greatest.
+
+set -e
+
+if [[ -z "$DOTFILES" ]]; then
+  echo '$DOTFILES var must be set'
+  exit 1
+fi
+
+if [[ $(which pretty-log) ]]; then
+  source pretty-log
+elif [[ -r bin/pretty-log ]]; then
+  source bin/pretty-log
+else
+  source $DOTFILES/bin/pretty-log
+fi
+
+usage() {
+  echo "dot -- dotfiles management"
+  echo ""
+  echo "Usage: dot [options]"
+  echo ""
+  echo "Options:"
+  echo "  -e, --edit    Open dotfiles directory for editing"
+  echo "  -h, --help    Show this help message and exit"
+  exit
+}
+
+while test $# -gt 0; do
+  case "$1" in
+    "-h"|"--help")
+      usage
+      ;;
+    "-e"|"--edit")
+      exec "$EDITOR" "$DOTFILES"
+      exit
+      ;;
+    *)
+      echo "Invalid option: $1"
+      usage
+      ;;
+  esac
+  shift
+done
+
+# Setup macos
+header "Setup macos"
+$DOTFILES/macos/setup.sh | while read -r data; do info "$data"; done
+
+# Install homebrew
+header "Setup homebrew"
+$DOTFILES/homebrew/setup.sh | while read -r data; do info "$data"; done
+
+# Install software
+header "Setup sofware"
+$DOTFILES/script/install | while read -r data; do info "$data"; done

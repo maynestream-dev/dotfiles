@@ -1,0 +1,18 @@
+#!/bin/sh
+#
+# Run all dotfiles installers.
+
+set -e
+
+if [[ -z "$DOTFILES" ]]; then
+  echo '$DOTFILES var must be set'
+  exit 1
+fi
+
+cd "$DOTFILES"
+
+source bin/pretty-log
+
+# find the installers and run them iteratively
+info "Running installers..."
+find . -name install.sh | while read installer ; do sh -c "${installer}" ; done
