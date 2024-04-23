@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 set -e
 
@@ -10,6 +10,12 @@ fi
 cd "$DOTFILES"
 
 source bin/pretty-log
+
+if [ "$(uname -s)" != "Darwin" ]
+then
+  info "Not a macos system"
+  exit 0
+fi
 
 # Set macOS defaults
 macos/set-defaults.sh

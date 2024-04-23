@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 if [[ ! -d "${XDG_CONFIG_HOME:-$HOME/.config}"/nvim ]]; then
   info "Cloning nvim kickstart"

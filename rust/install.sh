@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 function install_rustup() {
   rustup-init -y -q --no-modify-path
