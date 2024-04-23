@@ -2,7 +2,7 @@
 [include]
         path = ~/.gitconfig.local
 [hub]
-        protocol = https
+        protocol = ssh
 [alias]
         wtf     = !$ZSH/bin/git-wtf
         count   = !git shortlog -sn
