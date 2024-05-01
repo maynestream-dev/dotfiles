@@ -7,6 +7,9 @@ TODO:
 - alacritty config
 - tmux config
 - nvim config
+- cleanup zshrc / zshenv
+- aliases n functions
+- dotfiles update and zgenom recompile
 
 import:
 - https://github.com/blay/dotfiles/blob/master/tmux.conf
