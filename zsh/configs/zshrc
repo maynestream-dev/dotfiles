@@ -160,7 +160,9 @@ then
 fi
 
 # 1password plugins
-source /Users/c.mayne/.config/op/plugins.sh
+if [[ -f ~/.config/op/plugins.sh ]]; then
+  source ~/.config/op/plugins.sh
+fi
 
 # To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
 #[[ ! -f "$ZDOTDIR/.p10k.zsh" ]] || source "$ZDOTDIR/.p10k.zsh"
