@@ -11,4 +11,4 @@ brew "stow"
 brew "watch"
 brew "xdg-ninja"
 
-cask "sublimetext"
+cask "sublime-text"
