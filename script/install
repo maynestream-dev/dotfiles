@@ -15,4 +15,4 @@ source bin/pretty-log
 
 # find the installers and run them iteratively
 info "Running installers..."
-find . -name install.sh | while read installer ; do sh -c "${installer}" ; done
+find . -name install.sh | while read installer ; do zsh -c "${installer}" ; done
