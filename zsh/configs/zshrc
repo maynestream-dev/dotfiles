@@ -1,13 +1,6 @@
 # .zshrc is for interactive shells
 
-# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.config/zsh/.zshrc.
-# Initialization code that may require console input (password prompts, [y/n]
-# confirmations, etc.) must go above this block; everything else may go below.
-#if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
-#  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
-#fi
-
-# profile startup
+# uncomment to start profiling 
 # zmodload zsh/zprof
 
 # see options for zsh on sharing history https://zsh.sourceforge.io/Doc/Release/Options.html#History
@@ -22,10 +15,6 @@ setopt SHARE_HISTORY
 # add brew to $PATH (prezto brew module needs it on the path)
 #[[ -d /opt/homebrew ]] && eval "$(/opt/homebrew/bin/brew shellenv)"
 #[[ -d ~/.linuxbrew ]] && eval "$(~/.linuxbrew/bin/brew shellenv)"
-if command -v brew > /dev/null; then
-  export DYLD_FALLBACK_LIBRARY_PATH="$(brew --prefix)/lib"
-  [[ -d "$(brew --prefix)/opt/llvm" ]] && path=("$(brew --prefix)/opt/llvm/bin" $path)
-fi;
 
 # zgenom - an optimized zsh package manager
 export ZGEN_DIR=$XDG_DATA_HOME/zgenom
@@ -46,7 +35,6 @@ if ! zgenom saved; then
   zgenom ohmyzsh plugins/colored-man-pages
   zgenom ohmyzsh plugins/brew
   if [[ $(uname -a | grep -ci Darwin) = 1 ]]; then
-    # Load macOS-specific plugins - https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/macos
     zgenom ohmyzsh plugins/macos
   fi
 
@@ -54,30 +42,28 @@ if ! zgenom saved; then
   zgenom prezto
 
   # everything else
-  #zgenom load romkatv/powerlevel10k powerlevel10k
   zgenom load zsh-users/zsh-completions src
   zgenom load zsh-users/zsh-syntax-highlighting
   zgenom load zsh-users/zsh-history-substring-search
   zgenom load jonmosco/kube-ps1
 
   zgenom save
-  # zgenom compile ~/.zshrc
   zgenom compile $ZDOTDIR/.zshrc
   zgenom compile $ZDOTDIR
 fi
 
+# prompt config
 RPROMPT='$(kube_ps1)'$RPROMPT
 
+# ssh-agent config
 zstyle :omz:plugins:ssh-agent agent-forwarding yes
 zstyle :omz:plugins:ssh-agent helper ksshaskpass
 zstyle :omz:plugins:ssh-agent lazy yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-load-keychain
 
-# Put Go pkgs in $XDG_DATA_HOME, add GOBIN to the path, add brew libs to CGO
-if command -v go > /dev/null; then
-  export GOPATH=$XDG_DATA_HOME/go
-  [[ -d $GOPATH/bin ]] && path=("$GOPATH/bin" $path)
-  if command -v brew > /dev/null; then export CGO_LDFLAGS="-L$(brew --prefix)/lib"; fi
+# go config
+if command -v goenv > /dev/null; then
+  eval "$(goenv init -)"
 fi
 
 # never generate .pyc files: it's slower, but maintains your sanity
@@ -154,8 +140,7 @@ fi
 # Stash your environment variables in ~/.localrc. This means they'll stay out
 # of your main dotfiles repository (which may be public, like this one), but
 # you'll have access to them in your scripts.
-if [[ -a ~/.localrc ]]
-then
+if [[ -a ~/.localrc ]]; then
   source ~/.localrc
 fi
 
@@ -164,9 +149,6 @@ if [[ -f ~/.config/op/plugins.sh ]]; then
   source ~/.config/op/plugins.sh
 fi
 
-# To customize prompt, run `p10k configure` or edit ~/.config/zsh/.p10k.zsh.
-#[[ ! -f "$ZDOTDIR/.p10k.zsh" ]] || source "$ZDOTDIR/.p10k.zsh"
-#(( ! ${+functions[p10k]} )) || p10k finalize
-
+# uncomment to complete profiling
 # zprof
 
