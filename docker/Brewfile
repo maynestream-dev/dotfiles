@@ -1,6 +1,7 @@
+brew "docker"
+brew "docker-compose"
+brew "colima"
 brew "whalebrew"
-
-cask "orbstack"
 brew "kubectl"
 brew "k9s"
 brew "kubectx"

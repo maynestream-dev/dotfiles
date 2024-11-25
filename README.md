@@ -6,6 +6,8 @@ One-line setup
 
 TODO:
 - configure dotfiles project location
+- add colima stuff, including default config
+- add linking of dotfiles from projects
 - support git login/ssh key provisioning
 - move git files from home to xdg dir
 - alacritty config
