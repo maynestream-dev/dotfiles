@@ -13,15 +13,26 @@
         ui = true
 [core]
         excludesfile = ~/.gitignore
-        editor = vim
+        editor = nvim
+        pager = bat
+[commit]
+        gpgsign = true
 [apply]
         whitespace = nowarn
+[diff]
+        tool = nvimdiff
+        guitool = nvimdiff
+[merge]
+        tool = nvimdiff
+        conflictstyle = diff3
 [mergetool]
         keepBackup = false
-[difftool]
-        prompt = false
+        trustExitCode = false
+        prompt = true
 [help]
         autocorrect = 1
+[pull]
+        rebase = true
 [push]
         # See `git help config` (search for push.default)
         # for more information on different options of the below setting.
@@ -36,3 +47,7 @@
         insteadOf = https://gitlab.com/
 [url "git@github.com:"]
         insteadOf = https://github.com/
+[gpg]
+        format = ssh
+[user]
+        signingkey = ~/.ssh/id_ed25519.pub
