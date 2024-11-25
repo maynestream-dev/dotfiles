@@ -10,3 +10,5 @@ brew "rg"
 brew "stow"
 brew "watch"
 brew "xdg-ninja"
+
+cask "sublimetext"
