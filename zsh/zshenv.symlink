@@ -11,7 +11,7 @@ export XDG_CACHE_HOME="${XDG_CACHE_HOME:=$HOME/.cache}"
 export XDG_DATA_HOME="${XDG_DATA_HOME:=$HOME/.local/share}"
 export XDG_STATE_HOME="${XDG_STATE_HOME:=$HOME/.local/state}"
 export XDG_RUNTIME_DIR="${XDG_RUNTIME_DIR:=$HOME/.xdg}"
-export XDG_PROJECTS_DIR="${XDG_PROJECTS_DIR:=$HOME/Projects}"
+export XDG_PROJECTS_DIR="${XDG_PROJECTS_DIR:=$HOME/projects}"
 
 # zsh config root dir magic
 export ZDOTDIR="${ZDOTDIR:=$XDG_CONFIG_HOME/zsh}"
@@ -25,12 +25,4 @@ export PAGER=less
 export LESS='-F -g -i -M -R -S -w -X -z-4'
 
 # shortcut to this dotfiles path is $DOTFILES
-export DOTFILES=$HOME/.dotfiles
-
-# Stash your environment variables in ~/.localrc. This means they'll stay out
-# of your main dotfiles repository (which may be public, like this one), but
-# you'll have access to them in your scripts.
-if [[ -a ~/.localrc ]]
-then
-  source ~/.localrc
-fi
+export DOTFILES=$HOME/projects/.dotfiles

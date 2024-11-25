@@ -1,7 +1,11 @@
 # dotfiles
 Public dotfiles repository
 
+One-line setup
+`cd ~; mkdir projects; git clone https://github.com/maynestream-dev/dotfiles.git .dotfiles; cd .dotfiles; bin/bootstrap`
+
 TODO:
+- configure dotfiles project location
 - support git login/ssh key provisioning
 - move git files from home to xdg dir
 - alacritty config
@@ -10,6 +14,7 @@ TODO:
 - cleanup zshrc / zshenv
 - aliases n functions
 - dotfiles update and zgenom recompile
+- move python setup from Brewfile
 
 import:
 - https://github.com/blay/dotfiles/blob/master/tmux.conf

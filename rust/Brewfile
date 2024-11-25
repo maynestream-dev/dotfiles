@@ -1,1 +1,1 @@
-brew "rustup-init"
+brew "rustup"

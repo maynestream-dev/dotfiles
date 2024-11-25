@@ -30,4 +30,9 @@
         default = simple
         autoSetupRemote = true
 [init]
-	defaultBranch = master
+        defaultBranch = master
+# force git ssh protocol
+[url "git@gitlab.com:"]
+        insteadOf = https://gitlab.com/
+[url "git@github.com:"]
+        insteadOf = https://github.com/
