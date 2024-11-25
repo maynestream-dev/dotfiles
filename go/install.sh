@@ -1,4 +1,5 @@
 #!/bin/zsh
 
-goenv install latest
+echo Installing latest go binaries...
+goenv install -s latest
 goenv global latest
