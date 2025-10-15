@@ -1,0 +1,105 @@
+# Get editor completions based on the config schema
+"$schema" = 'https://starship.rs/config-schema.json'
+
+# Inserts a blank line between shell prompts
+add_newline = false
+
+# A minimal left prompt
+format = """
+$username\
+$hostname\
+$localip\
+$shlvl\
+$directory\
+$git_branch\
+$git_commit\
+$git_state\
+$git_metrics\
+$git_status\
+$mise\
+$custom\
+$sudo\
+$cmd_duration\
+$line_break\
+$jobs\
+$battery\
+$status\
+$container\
+$netns\
+$shell\
+$character"""
+
+# move the rest of the prompt to the right
+right_format = """$all"""
+
+[kubernetes]
+disabled = false
+
+[username]
+disabled = false
+
+[hostname]
+disabled = false
+
+[localip]
+disabled = false
+
+[shlvl]
+disabled = false
+format = '[$symbol]($style)'
+repeat = true
+symbol = '❯'
+repeat_offset = 1
+threshold = 0
+
+[directory]
+disabled = false
+
+[git_branch]
+disabled = false
+
+[git_commit]
+disabled = false
+
+[git_state]
+disabled = false
+
+[git_metrics]
+disabled = false
+
+[git_status]
+disabled = false
+
+[mise]
+disabled = false
+
+[sudo]
+disabled = false
+
+[cmd_duration]
+disabled = false
+
+[line_break]
+disabled = false
+
+[jobs]
+disabled = false
+
+[battery]
+disabled = false
+
+[status]
+disabled = false
+
+[container]
+disabled = false
+
+[netns]
+disabled = false
+
+[shell]
+disabled = false
+
+[character]
+disabled = false
+

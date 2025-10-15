@@ -6,7 +6,7 @@ brew "yubikey-agent"
 cask "obsidian"
 cask "spotify"
 cask "vlc"
-cask "zoom"
+cask "sublime-text"
 
 if OS.mac?
   cask "amethyst"

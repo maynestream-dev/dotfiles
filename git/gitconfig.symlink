@@ -4,8 +4,11 @@
 [hub]
         protocol = ssh
 [alias]
-        wtf     = !$ZSH/bin/git-wtf
-        count   = !git shortlog -sn
+        wtf          = !$ZSH/bin/git-wtf
+        count        = !git shortlog -sn
+        seal-changes = "!f() { git diff --quiet || ((git switch \"$1\" 2>/dev/null || git switch -c \"$1\") && git add . && git commit -m \"$2\" && git push) ; }; f"
+        accom        = "!f() { git add . && git commit -m \"$1\"; }; f"
+        pretty       = log --graph --pretty=format:'%C(cyan)%h%Creset -%C(yellow)%d%Creset %s %Cgreen(%cr) %C(magenta)<%an>%Creset' --abbrev-commit --date=relative
 [color]
         diff = auto
         status = auto
@@ -14,17 +17,27 @@
 [core]
         excludesfile = ~/.gitignore
         editor = nvim
-        pager = bat
+        pager = delta
+        ignorecase = true
+        autocrlf = input
 [commit]
         gpgsign = true
+[delta]
+        navigate = true  # use n and N to move between diff sections
+        dark = true      # or light = true, or omit for auto-detection
+        line-numbers = true
+        hyperlinks = true
+        side-by-side = true
 [apply]
         whitespace = nowarn
 [diff]
         tool = nvimdiff
         guitool = nvimdiff
+[interactive]
+        diffFilter = delta --color-only
 [merge]
         tool = nvimdiff
-        conflictstyle = diff3
+        conflictstyle = zdiff3
 [mergetool]
         keepBackup = false
         trustExitCode = false
@@ -41,8 +54,10 @@
         default = simple
         autoSetupRemote = true
 [init]
-        defaultBranch = master
+        defaultBranch = main
 [gpg]
         format = ssh
 [user]
         signingkey = ~/.ssh/id_ed25519.pub
+[includeIf "gitdir:/Users/c.mayne/projects/shaype-workspace/**"]
+        path = /Users/c.mayne/projects/shaype-workspace/env/git/.gitconfig.shaype

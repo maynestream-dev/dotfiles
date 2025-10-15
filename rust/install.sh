@@ -1,7 +1,7 @@
 #!/bin/bash
 
 function install_rustup() {
-  rustup-init -y -q --no-modify-path
+  rustup-init -y -q
   source "${XDG_DATA_HOME}/cargo/env"
 }
 
@@ -12,3 +12,6 @@ elif [ ! $(rustup toolchain list | wc -l) -gt 0 ]; then
 fi
 
 echo "Rustup installed: $(rustup toolchain list)"
+
+mkdir -p $RUSTUP_HOME/completions
+rustup completions zsh > $RUSTUP_HOME/completions/_rustup
