@@ -1,0 +1,6 @@
+cask "corretto@21"
+brew "xmlstarlet"
+brew "grpcurl"
+brew "gnupg"
+
+cask "sublime-text"

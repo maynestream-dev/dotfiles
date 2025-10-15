@@ -62,9 +62,9 @@ zstyle :omz:plugins:ssh-agent lazy yes
 zstyle :omz:plugins:ssh-agent ssh-add-args --apple-load-keychain
 
 # go config
-if command -v goenv > /dev/null; then
-  eval "$(goenv init -)"
-fi
+# if command -v goenv > /dev/null; then
+#   eval "$(goenv init -)"
+# fi
 
 # never generate .pyc files: it's slower, but maintains your sanity
 if command -v python > /dev/null; then export PYTHONDONTWRITEBYTECODE=1; fi
@@ -118,8 +118,14 @@ if [[ ! -z "$ZSH_VERSION" ]]; then
     source $file
   done
 
-  # load everything but the path and completion files
-  for file in ${${config_files:#*/path.zsh}:#*/completion.zsh}
+  # load the fpath files
+  for file in ${(M)config_files:#*/fpath.zsh}
+  do
+    source $file
+  done
+
+  # load everything but the path, fpath and completion files
+  for file in ${${${config_files:#*/path.zsh}:#*/fpath.zsh}:#*/completion.zsh}
   do
     source $file
   done
@@ -149,6 +155,8 @@ if [[ -f ~/.config/op/plugins.sh ]]; then
   source ~/.config/op/plugins.sh
 fi
 
+eval "$(mise activate zsh)"
+eval "$(starship init zsh)"
+
 # uncomment to complete profiling
 # zprof
-
